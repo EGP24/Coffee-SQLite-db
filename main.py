@@ -1,6 +1,9 @@
 import sys
 
 from PyQt5 import uic
+from addCoffeeForm import Ui_Dialog as addCoffeeForm
+from editCoffeeForm import Ui_Dialog as editCoffeeForm
+from mainForm import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QDialog, QMessageBox
 import sqlite3
 
@@ -9,10 +12,11 @@ def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
+
         self.con = sqlite3.connect('coffee.sqlite')
         self.cur = self.con.cursor()
 
@@ -56,10 +60,10 @@ class MyWidget(QMainWindow):
                 QMessageBox.critical(None, 'Ошибка', 'Что-то пошло не так', QMessageBox.Ok)
 
 
-class AddCoffeeDialog(QDialog):
+class AddCoffeeDialog(QDialog, addCoffeeForm):
     def __init__(self, tableWidget, updateTableWidget):
         super().__init__()
-        uic.loadUi('addCoffeeForm.ui', self)
+        self.setupUi(self)
 
         self.tableWidget = tableWidget
         self.updateTableWidget = updateTableWidget
@@ -91,10 +95,10 @@ class AddCoffeeDialog(QDialog):
             QMessageBox.critical(None, 'Ошибка', 'Что-то пошло не так', QMessageBox.Ok)
 
 
-class EditCoffeeDialog(QDialog):
+class EditCoffeeDialog(QDialog, editCoffeeForm):
     def __init__(self, tableWidget, updateTableWidget, ID, title, degree, groudOrBean, description, price, size):
         super().__init__()
-        uic.loadUi('editCoffeeForm.ui', self)
+        self.setupUi(self)
 
         self.ID = ID
         self.tableWidget = tableWidget
